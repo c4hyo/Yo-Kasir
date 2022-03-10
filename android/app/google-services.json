@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "793629886533",
+    "project_id": "yo-kasir",
+    "storage_bucket": "yo-kasir.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:793629886533:android:72ce3dc886b7989f923b2c",
+        "android_client_info": {
+          "package_name": "com.example.yo_kasir"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "793629886533-rcjf6ioutudmgnk8sbt48nmlarj04p51.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.yo_kasir",
+            "certificate_hash": "2bbf23b0e52db872972528ddb91f055060c2ad24"
+          }
+        },
+        {
+          "client_id": "793629886533-aukmg462sp7vcfdqumcmfuc57efvknj2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkr1uWkOTDuPdpdSnPqnC8YSKPMQaqMG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "793629886533-aukmg462sp7vcfdqumcmfuc57efvknj2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
