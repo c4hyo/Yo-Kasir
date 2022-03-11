@@ -48,3 +48,7 @@ ButtonStyle borderButton = ButtonStyle(
     color: primaryColor,
   )),
 );
+
+Padding paddingList = Padding(
+  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+);
