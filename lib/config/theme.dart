@@ -4,6 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 final primaryColor = Color.fromARGB(255, 76, 203, 235); // hex #4ccbebd9
 final primaryColorAccent = Color(0xffd7eef4);
 
+final secondaryColor = Color.fromARGB(255, 182, 76, 235); // hex #b64ceb
+final secondaryColorAccent = Color.fromARGB(255, 226, 215, 244);
+
 Color lightText = Color.fromARGB(221, 221, 220, 220);
 Color darkText = Colors.black87;
 Color lightBackground = Color.fromARGB(255, 246, 252, 252);
