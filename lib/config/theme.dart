@@ -16,6 +16,9 @@ ThemeData tema = ThemeData(
     splashColor: primaryColorAccent,
     elevation: 0,
   ),
+  colorScheme: ThemeData().colorScheme.copyWith(
+        primary: primaryColor,
+      ),
   appBarTheme: AppBarTheme(
     elevation: 0,
     backgroundColor: primaryColorAccent,
