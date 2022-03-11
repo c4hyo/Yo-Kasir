@@ -6,6 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:yo_kasir/app/modules/home/views/home_view.dart';
 
 import 'app/routes/app_pages.dart';
+import 'config/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,8 +24,9 @@ class MyApp extends StatelessWidget {
       title: "Application",
       debugShowCheckedModeBanner: false,
       // home: WrapAuth(),
-      initialRoute: Routes.HOME,
+      initialRoute: Routes.LOGIN,
       getPages: AppPages.routes,
+      theme: tema,
     );
   }
 }
