@@ -49,6 +49,4 @@ ButtonStyle borderButton = ButtonStyle(
   )),
 );
 
-Padding paddingList = Padding(
-  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-);
+EdgeInsets paddingList = EdgeInsets.fromLTRB(15, 10, 15, 10);
