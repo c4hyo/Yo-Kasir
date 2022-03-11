@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-final primaryColor = Color.fromARGB(255, 76, 203, 235);
+final primaryColor = Color.fromARGB(255, 76, 203, 235); // hex #4ccbebd9
 final primaryColorAccent = Color(0xffd7eef4);
 
 Color lightText = Color.fromARGB(221, 221, 220, 220);
@@ -21,14 +21,17 @@ ThemeData tema = ThemeData(
       ),
   appBarTheme: AppBarTheme(
     elevation: 0,
-    backgroundColor: primaryColorAccent,
-    titleTextStyle: GoogleFonts.kaushanScript(
+    backgroundColor: lightBackground,
+    titleTextStyle: GoogleFonts.berkshireSwash(
       color: darkText,
       fontWeight: FontWeight.bold,
       fontSize: 18,
     ),
     centerTitle: true,
     actionsIconTheme: IconThemeData(
+      color: darkText,
+    ),
+    iconTheme: IconThemeData(
       color: darkText,
     ),
   ),
