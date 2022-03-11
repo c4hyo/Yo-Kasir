@@ -32,4 +32,8 @@ class Helper {
     // digunakan untuk memformat tanggal
     return DateFormat.yMMMMd("id").add_jms().format(DateTime.parse(date!));
   }
+
+  static tanggal(String? date) {
+    return DateFormat.MMMMd("id").format(DateTime.parse(date!));
+  }
 }

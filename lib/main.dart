@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       title: "Application",
       debugShowCheckedModeBanner: false,
       // home: WrapAuth(),
-      initialRoute: Routes.LOGIN,
+      initialRoute: Routes.HOME,
       getPages: AppPages.routes,
       theme: tema,
     );
