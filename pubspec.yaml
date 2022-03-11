@@ -2,34 +2,32 @@ name: yo_kasir
 version: 1.0.0+1
 publish_to: none
 description: A new Flutter project.
-environment: 
+environment:
   sdk: '>=2.16.1 <3.0.0'
 
-dependencies: 
+dependencies:
   cloud_firestore: ^3.1.10
   cupertino_icons: ^1.0.2
-  
   firebase_auth: ^3.3.9
   firebase_core: ^1.13.1
-  
   flutter:
     sdk: flutter
-  
   flutter_speed_dial: ^5.0.0+1
+  flutter_svg: ^1.0.3
   fluttericon: ^2.0.0
   get: 4.6.1
   google_fonts: ^2.3.1
   image_picker: ^0.8.4+10
   intl: ^0.17.0
-  
   percent_indicator: ^4.0.0
-  
 
-dev_dependencies: 
+dev_dependencies:
   flutter_lints: ^1.0.0
-  flutter_test: 
+  flutter_test:
     sdk: flutter
 
-flutter: 
+flutter:
   uses-material-design: true
-
+  assets:
+    - assets/
+    # - assets/lottie/
