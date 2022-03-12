@@ -30,6 +30,7 @@ class TambahCabangView extends GetView<CabangController> {
                     telepon: teleponCabang.text,
                     pengelola: [myId]);
                 controller.tambahCabang(controller.tokoM.value, toko, myId);
+
                 Get.back();
               } else {
                 Get.snackbar("Error", "Form harus di isi semua");

@@ -15,6 +15,12 @@ class BerandaCabangView extends GetView<CabangController> {
   final myId = Get.find<AppController>().profilModel.uid;
   @override
   Widget build(BuildContext context) {
+    controller.countProduk.bindStream(
+      controller.getCountProduk(
+        controller.tokoM.value.tokoId,
+        controller.cabangM.value.cabangId,
+      ),
+    );
     return Scaffold(
       drawer: Drawer(
         child: _listDrawerCabang(),
@@ -37,7 +43,7 @@ class BerandaCabangView extends GetView<CabangController> {
                   flex: 5,
                   child: cardCount(
                     judul: "Total\nProduk",
-                    total: 100,
+                    total: controller.countProduk.value,
                     warnaAngka: secondaryColor,
                     warnaBackground: secondaryColorAccent,
                     icon: FontAwesome5.list_alt,

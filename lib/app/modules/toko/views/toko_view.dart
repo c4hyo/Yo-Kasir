@@ -34,12 +34,14 @@ class TokoView extends GetView<TokoController> {
               children: [
                 Expanded(
                   flex: 3,
-                  child: cardCount(
-                    judul: "Total\nCabang",
-                    total: controller.tokoM.value.cabang,
-                    warnaAngka: primaryColor,
-                    warnaBackground: primaryColorAccent,
-                    icon: FontAwesome5.store,
+                  child: Obx(
+                    () => cardCount(
+                      judul: "Total\nCabang",
+                      total: controller.tokoM.value.cabang,
+                      warnaAngka: primaryColor,
+                      warnaBackground: primaryColorAccent,
+                      icon: FontAwesome5.store,
+                    ),
                   ),
                 ),
                 Expanded(

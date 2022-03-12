@@ -24,6 +24,7 @@ class TokoController extends GetxController {
   }
 
   tambahProdukToko(ItemModel item, String? tokoId) async {
+    final getCabang = await tokoDb.doc(tokoId).collection("cabang").get();
     await tokoDb.doc(tokoId).collection("produk-toko").add({
       "harga": item.harga,
       "nama": item.namaItem,
@@ -33,6 +34,25 @@ class TokoController extends GetxController {
       "qty": 0,
       "harga_diskon": 0,
       "kategori_id": "",
+    }).then((value) async {
+      getCabang.docs.forEach((element) async {
+        await tokoDb
+            .doc(tokoId)
+            .collection("cabang")
+            .doc(element.id)
+            .collection("produk-cabang")
+            .doc(value.id)
+            .set({
+          "harga": item.harga,
+          "nama": item.namaItem,
+          "deskripsi": item.deskripsi,
+          "is_diskon": false,
+          "diskon": 0,
+          "qty": 0,
+          "harga_diskon": 0,
+          "kategori_id": "",
+        });
+      });
     });
   }
 

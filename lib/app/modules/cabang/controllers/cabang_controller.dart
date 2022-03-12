@@ -12,6 +12,7 @@ import '../views/beranda_cabang_view.dart';
 class CabangController extends GetxController {
   final tokoM = TokoModel().obs;
   final cabangM = CabangModel().obs;
+  final countProduk = 0.obs;
 
   goToberandaCabang(CabangModel cabang) {
     cabangM.value = cabangM(cabang);
@@ -32,6 +33,8 @@ class CabangController extends GetxController {
       "kode_cabang": Helper.generateCode(),
       "pengelola": cabang.pengelola,
       "telepon": cabang.telepon,
+    }).then((value) async {
+      await tambahProdukCabang(toko.tokoId, value.id);
     });
     int getCountCabang = await tokoDb
         .doc(toko.tokoId)
@@ -46,6 +49,28 @@ class CabangController extends GetxController {
     });
     Get.find<TokoController>().tokoM.update((val) {
       val!.cabang = getCountCabang;
+    });
+  }
+
+  tambahProdukCabang(String? tokoId, String? cabangId) async {
+    final getDataProduk =
+        await tokoDb.doc(tokoId).collection("produk-toko").get();
+    getDataProduk.docs.forEach((element) async {
+      await tokoDb
+          .doc(tokoId)
+          .collection("cabang")
+          .doc(cabangId)
+          .collection("produk-cabang")
+          .add({
+        "harga": element['harga'],
+        "nama": element['nama'],
+        "deskripsi": element['deskripsi'],
+        "is_diskon": element['is_diskon'],
+        "diskon": element["diskon"],
+        "qty": element["qty"],
+        "harga_diskon": element["harga_diskon"],
+        "kategori_id": element["kategori_id"],
+      });
     });
   }
 
@@ -65,6 +90,16 @@ class CabangController extends GetxController {
     await tokoDb.doc(tokoId).collection("cabang").doc(cabangId).update({
       "pengelola": FieldValue.arrayRemove([uid]),
     });
+  }
+
+  Stream<int> getCountProduk(String? tokoId, String? cabangId) {
+    return tokoDb
+        .doc(tokoId)
+        .collection("cabang")
+        .doc(cabangId)
+        .collection("produk-cabang")
+        .snapshots()
+        .map((event) => event.docs.length);
   }
 
   @override
