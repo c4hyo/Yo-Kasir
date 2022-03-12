@@ -7,3 +7,4 @@ final auth = FirebaseAuth.instance;
 // pemanggilan collection dari firestore
 final profilDb = FirebaseFirestore.instance.collection("profil");
 final tokoDb = FirebaseFirestore.instance.collection("toko");
+final transaksiDb = FirebaseFirestore.instance.collection("transaksi");
