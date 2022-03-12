@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:yo_kasir/app/data/model_profil.dart';
+import 'package:yo_kasir/app/modules/home/controllers/home_controller.dart';
+import 'package:yo_kasir/app/modules/login/controllers/login_controller.dart';
 import 'package:yo_kasir/config/collection.dart';
 
 class AppController extends GetxController {
@@ -45,6 +47,11 @@ class AppController extends GetxController {
     return profilPengguna(uid).then((value) => profilModel = value);
   }
 
+  resetProfil() {
+    _profil.value = ProfilModel();
+    profilModel = ProfilModel();
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -56,5 +63,7 @@ class AppBindings extends Bindings {
   @override
   void dependencies() {
     Get.put<AppController>(AppController(), permanent: true);
+    Get.put(LoginController());
+    Get.put(HomeController());
   }
 }

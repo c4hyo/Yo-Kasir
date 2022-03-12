@@ -36,4 +36,6 @@ class Helper {
   static tanggal(String? date) {
     return DateFormat.MMMMd("id").format(DateTime.parse(date!));
   }
+
+  static final rupiah = NumberFormat.simpleCurrency(locale: "id_ID");
 }

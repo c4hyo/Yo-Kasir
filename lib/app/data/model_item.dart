@@ -7,6 +7,9 @@ class ItemModel {
   String? namaItem;
   String? deskripsi;
   String? kategoriId;
+  bool? isDiskon;
+  int? diskon;
+  int? hargaDiskon;
   ItemModel({
     this.itemId,
     this.qty,
@@ -14,6 +17,9 @@ class ItemModel {
     this.namaItem,
     this.deskripsi,
     this.kategoriId,
+    this.diskon,
+    this.hargaDiskon,
+    this.isDiskon,
   });
   ItemModel.doc(DocumentSnapshot doc) {
     itemId = doc.id;
@@ -22,6 +28,9 @@ class ItemModel {
     namaItem = doc['nama'];
     deskripsi = doc['deskripsi'];
     kategoriId = doc['kategori_id'];
+    diskon = doc['diskon'];
+    hargaDiskon = doc['harga_diskon'];
+    isDiskon = doc['is_diskon'];
   }
 }
 

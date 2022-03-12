@@ -1,59 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
+
 import 'package:get/get.dart';
-import 'package:yo_kasir/app/modules/toko/bindings/toko_binding.dart';
-import 'package:yo_kasir/app/modules/toko/views/produk_toko_view.dart';
-import 'package:yo_kasir/app/routes/app_pages.dart';
+import 'package:yo_kasir/app/controllers/app_controller.dart';
+import 'package:yo_kasir/app/modules/cabang/bindings/cabang_binding.dart';
+import 'package:yo_kasir/app/modules/cabang/controllers/cabang_controller.dart';
+import 'package:yo_kasir/app/modules/cabang/views/pengaturan_cabang_view.dart';
 
-import 'package:yo_kasir/config/theme.dart';
-
+import '../../../../config/theme.dart';
 import '../../../../widget/card_count.dart';
-import '../controllers/toko_controller.dart';
 
-class TokoView extends GetView<TokoController> {
+class BerandaCabangView extends GetView<CabangController> {
+  final myId = Get.find<AppController>().profilModel.uid;
   @override
   Widget build(BuildContext context) {
-    controller.produkCount.bindStream(
-      controller.getProdukCount(controller.tokoM.value.tokoId),
-    );
     return Scaffold(
       drawer: Drawer(
-        child: _listDrawer(),
+        child: _listDrawerCabang(),
       ),
       appBar: AppBar(
-        title: Text('Nama Toko'),
+        title: Text('Beranda Cabang View'),
         centerTitle: true,
       ),
       body: Padding(
         padding: paddingList,
         child: ListView(
           children: [
+            ElevatedButton(
+              onPressed: () {},
+              child: Text("Transaksi sekarang"),
+            ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Expanded(
-                  flex: 3,
-                  child: cardCount(
-                    judul: "Total\nCabang",
-                    total: controller.tokoM.value.cabang,
-                    warnaAngka: primaryColor,
-                    warnaBackground: primaryColorAccent,
-                    icon: FontAwesome5.store,
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
+                  flex: 5,
                   child: cardCount(
                     judul: "Total\nProduk",
-                    total: controller.produkCount.value,
+                    total: 100,
                     warnaAngka: secondaryColor,
                     warnaBackground: secondaryColorAccent,
                     icon: FontAwesome5.list_alt,
                   ),
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: 5,
                   child: cardCount(
                     judul: "Transaksi\nhari ini",
                     total: 100,
@@ -63,9 +54,6 @@ class TokoView extends GetView<TokoController> {
                   ),
                 ),
               ],
-            ),
-            SizedBox(
-              height: 10,
             ),
             Card(
               color: primaryColorAccent,
@@ -113,81 +101,60 @@ class TokoView extends GetView<TokoController> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              "Transaksi terbaru",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            ListTile(
-              title: Text("Cabang X"),
-              subtitle: Text("Harga : Rp. 1.200.000 ~ 10 Item"),
-              trailing: ElevatedButton(
-                style: borderButton,
-                onPressed: () {},
-                child: Text(
-                  "Detail",
-                  style: TextStyle(
-                    color: primaryColor,
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _listDrawer() {
+  Widget _listDrawerCabang() {
     return ListView(
       children: [
         UserAccountsDrawerHeader(
           decoration: BoxDecoration(color: primaryColor),
           accountName: Text("Nama Toko"),
-          accountEmail: Text("Telepon.e"),
+          accountEmail: Text("Cabang"),
         ),
         ListTile(
-          onTap: () {
-            Get.back();
-            Get.to(
-              () => ProdukTokoView(),
-              arguments: {"toko": controller.tokoM.value},
-              binding: TokoBinding(),
-            );
-          },
           title: Text("Produk yang dijual"),
           leading: Icon(
             FontAwesome.list_alt,
           ),
         ),
-        Visibility(
-          child: ListTile(
-            onTap: () {
-              Get.back();
-              Get.toNamed(
-                Routes.CABANG,
-                arguments: {"toko": controller.tokoM.value},
-              );
-            },
-            title: Text("Cabang"),
-            leading: Icon(FontAwesome5.store),
-          ),
-        ),
         ListTile(
-          title: Text("Transaksi"),
+          title: Text("Daftar transaksi"),
           leading: Icon(
             FontAwesome.exchange,
           ),
         ),
+        Visibility(
+          visible: controller.tokoM.value.pemilikId == myId,
+          child: ListTile(
+            title: Text("Pengaturan cabang"),
+            onTap: () {
+              Get.back();
+              Get.to(
+                () => PengaturanCabangView(),
+                arguments: {
+                  "cabang": controller.cabangM.value,
+                  "toko": controller.tokoM.value
+                },
+                binding: CabangBinding(),
+              );
+            },
+            leading: Icon(
+              FontAwesome.cog,
+            ),
+          ),
+        ),
         ListTile(
-          title: Text("Pengaturan toko"),
+          onTap: () {
+            Get.back();
+            Get.back();
+          },
+          title: Text("Kembali"),
           leading: Icon(
-            FontAwesome.cog,
+            Icons.arrow_back,
           ),
         ),
       ],

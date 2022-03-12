@@ -1,16 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
 
 import 'package:get/get.dart';
+import 'package:yo_kasir/app/controllers/app_controller.dart';
+import 'package:yo_kasir/app/data/model_cabang.dart';
+import 'package:yo_kasir/app/data/model_toko.dart';
+import 'package:yo_kasir/app/modules/toko/bindings/toko_binding.dart';
+import 'package:yo_kasir/app/modules/toko/views/tambah_toko_view.dart';
 import 'package:yo_kasir/app/routes/app_pages.dart';
+import 'package:yo_kasir/config/collection.dart';
 import 'package:yo_kasir/config/theme.dart';
 
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
+  final appC = Get.find<AppController>();
   final kode = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final appC = Get.find<AppController>();
     return Scaffold(
       appBar: AppBar(
         title: Text(''),
@@ -20,7 +29,10 @@ class HomeView extends GetView<HomeController> {
             width: 10,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              auth.signOut();
+              Get.find<AppController>().resetProfil();
+            },
             icon: Icon(
               Icons.settings_outlined,
             ),
@@ -40,7 +52,7 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             Text(
-              "Nama Pengguna",
+              appC.profilModel.nama!.capitalize!,
               style: TextStyle(
                 color: darkText,
                 fontSize: 30,
@@ -50,123 +62,135 @@ class HomeView extends GetView<HomeController> {
             SizedBox(
               height: 10,
             ),
-            Obx(
-              () => ListView.builder(
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                itemCount: controller.count.value + 1,
-                itemBuilder: (_, i) {
-                  if (i == 0) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            Text("Toko Anda"),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Get.to(
+                        () => TambahTokoView(),
+                        binding: TokoBinding(),
+                        arguments: {"toko": TokoModel()},
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Toko Anda"),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 5,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  controller.increment();
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.add),
-                                    SizedBox(width: 5),
-                                    Text("Tambah Toko"),
-                                  ],
+                        Icon(Icons.add),
+                        SizedBox(width: 5),
+                        Text("Tambah Toko"),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  flex: 5,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: secondaryColor,
+                    ),
+                    onPressed: () {
+                      Get.dialog(
+                        Dialog(
+                          child: Container(
+                            padding: paddingList,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("Gabung Toko"),
+                                SizedBox(
+                                  height: 10,
                                 ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Expanded(
-                              flex: 5,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary: secondaryColor,
-                                ),
-                                onPressed: () {
-                                  Get.dialog(
-                                    Dialog(
-                                      child: Container(
-                                        padding: paddingList,
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text("Gabung Toko"),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            TextFormField(
-                                              controller: kode,
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
-                                              cursorColor: darkText,
-                                              style: TextStyle(
-                                                color: darkText,
-                                              ),
-                                              decoration: InputDecoration(
-                                                hintText: "Masukan Kode Toko",
-                                                contentPadding:
-                                                    EdgeInsets.all(20),
-                                                filled: true,
-                                                fillColor: primaryColorAccent,
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  borderSide: BorderSide(
-                                                    color: primaryColorAccent,
-                                                  ),
-                                                ),
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  borderSide: BorderSide(
-                                                    color: primaryColorAccent,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () {},
-                                              child: Text(
-                                                "Gabung",
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                TextFormField(
+                                  controller: kode,
+                                  keyboardType: TextInputType.emailAddress,
+                                  cursorColor: darkText,
+                                  style: TextStyle(
+                                    color: darkText,
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: "Masukan Kode Toko",
+                                    contentPadding: EdgeInsets.all(20),
+                                    filled: true,
+                                    fillColor: primaryColorAccent,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                        color: primaryColorAccent,
                                       ),
                                     ),
-                                  );
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      LineariconsFree.enter,
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                        color: primaryColorAccent,
+                                      ),
                                     ),
-                                    SizedBox(width: 5),
-                                    Text(
-                                      "Gabung Toko",
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    controller.gabungToko(
+                                      kode.text,
+                                      appC.profilModel.uid,
+                                    );
+                                  },
+                                  child: Text(
+                                    "Gabung",
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          LineariconsFree.enter,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          "Gabung Toko",
                         ),
                       ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Obx(
+              () => StreamBuilder<QuerySnapshot>(
+                stream: tokoDb
+                    .where("akses", arrayContains: appC.profilModel.uid)
+                    .snapshots(),
+                builder: (_, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
                     );
                   }
-                  return _cardToko();
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (_, i) {
+                      DocumentSnapshot doc = snapshot.data!.docs[i];
+                      TokoModel toko = TokoModel.doc(doc);
+
+                      return _cardToko(toko);
+                    },
+                  );
                 },
               ),
             ),
@@ -176,57 +200,44 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Widget _cardToko() {
+  Widget _cardToko(TokoModel toko) {
     return Card(
+      color: primaryColorAccent,
       child: Container(
         padding: paddingList,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Nama Toko"),
+            Text(
+              toko.namaToko!.capitalize!,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             SizedBox(
               height: 10,
             ),
-            Text("Alamat"),
+            Text(toko.alamatToko!.capitalizeFirst! +
+                " ~ (" +
+                toko.telepon! +
+                ")"),
             SizedBox(
               height: 10,
             ),
-            Text("Pengelola"),
-            SizedBox(
-              height: 10,
+            ElevatedButton(
+              onPressed: () {
+                if (toko.pemilikId == appC.profilModel.uid) {
+                  Get.toNamed(Routes.TOKO, arguments: {"toko": toko});
+                } else {
+                  Get.toNamed(Routes.CABANG, arguments: {
+                    "toko": toko,
+                    "cabang": CabangModel(),
+                  });
+                }
+              },
+              child: Text("Masuk Toko"),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  height: Get.size.width * 0.1,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 3,
-                    itemBuilder: (_, x) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          left: 5,
-                          right: 5,
-                        ),
-                        child: CircleAvatar(
-                          backgroundColor: primaryColorAccent,
-                          radius: 20,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed(Routes.TOKO);
-                  },
-                  child: Text("Masuk Toko"),
-                ),
-              ],
-            )
           ],
         ),
       ),

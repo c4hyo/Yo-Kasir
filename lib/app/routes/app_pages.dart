@@ -1,7 +1,11 @@
 import 'package:get/get.dart';
 
+import 'package:yo_kasir/app/modules/cabang/bindings/cabang_binding.dart';
+import 'package:yo_kasir/app/modules/cabang/views/cabang_view.dart';
 import 'package:yo_kasir/app/modules/home/bindings/home_binding.dart';
 import 'package:yo_kasir/app/modules/home/views/home_view.dart';
+import 'package:yo_kasir/app/modules/item/bindings/item_binding.dart';
+import 'package:yo_kasir/app/modules/item/views/item_view.dart';
 import 'package:yo_kasir/app/modules/login/bindings/login_binding.dart';
 import 'package:yo_kasir/app/modules/login/views/login_view.dart';
 import 'package:yo_kasir/app/modules/toko/bindings/toko_binding.dart';
@@ -29,6 +33,16 @@ class AppPages {
       name: _Paths.TOKO,
       page: () => TokoView(),
       binding: TokoBinding(),
+    ),
+    GetPage(
+      name: _Paths.CABANG,
+      page: () => CabangView(),
+      binding: CabangBinding(),
+    ),
+    GetPage(
+      name: _Paths.ITEM,
+      page: () => ItemView(),
+      binding: ItemBinding(),
     ),
   ];
 }
