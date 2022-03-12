@@ -1,20 +1,56 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:yo_kasir/app/controllers/app_controller.dart';
+import 'package:yo_kasir/app/data/model_profil.dart';
+import 'package:yo_kasir/config/collection.dart';
 
 class LoginController extends GetxController {
-  //TODO: Implement LoginController
+  var loading = false.obs;
+  var obsecure = true.obs;
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  // fungsi login
+  login({String? password, String? email}) async {
+    loading.value = true;
+    try {
+      await auth
+          .signInWithEmailAndPassword(
+        email: email!,
+        password: password!,
+      ) // fungsi login dari firebase
+          .then((value) async {
+        // mendapatkan data profil dari database
+        return Get.find<AppController>().profilModel =
+            await Get.find<AppController>().profilPengguna(value.user!.uid);
+      });
+      loading.value = false;
+    } catch (e) {
+      loading.value = false;
+    }
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
+  registrasi(ProfilModel profilModel, String? password) async {
+    loading.value = true;
 
-  @override
-  void onClose() {}
-  void increment() => count.value++;
+    try {
+      UserCredential us = await auth.createUserWithEmailAndPassword(
+        email: profilModel.email!,
+        password: password!,
+      );
+      ProfilModel pm = ProfilModel(
+        email: profilModel.email,
+        kota: profilModel.kota,
+        nama: profilModel.nama,
+        telepon: profilModel.telepon,
+        uid: us.user!.uid,
+      );
+      if (await Get.find<AppController>().buatAkun(pm)) {
+        Get.find<AppController>().profilModel = pm;
+        loading.value = false;
+        Get.back();
+      }
+      loading.value = false;
+    } catch (e) {
+      loading.value = false;
+    }
+  }
 }
