@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:yo_kasir/app/data/model_item.dart';
@@ -124,6 +125,33 @@ class TokoController extends GetxController {
         // print(element);
       });
       return total;
+    });
+  }
+
+  deleteAksesToko(String? tokoId, String? uid) async {
+    await tokoDb
+        .doc(tokoId)
+        .collection("cabang")
+        .where("pengelola", whereIn: [uid])
+        .get()
+        .then((value) {
+          if (value.docs.isNotEmpty) {
+            value.docs.forEach((element) async {
+              await tokoDb
+                  .doc(tokoId)
+                  .collection("cabang")
+                  .doc(element.id)
+                  .update({
+                "pengelola": FieldValue.arrayRemove([uid]),
+              });
+            });
+          }
+        });
+    await tokoDb.doc(tokoId).update({
+      "akses": FieldValue.arrayRemove([uid]),
+    });
+    tokoM.update((val) {
+      val!.akses!.removeWhere((element) => element == uid);
     });
   }
 
