@@ -141,7 +141,7 @@ class RegistrasiView extends GetView<LoginController> {
                             email: email.text,
                             kota: "",
                             nama: nama.text,
-                            telepon: [""],
+                            telepon: [],
                           );
                           controller.registrasi(pm, password.text);
                         },

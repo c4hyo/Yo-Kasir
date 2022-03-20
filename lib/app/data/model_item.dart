@@ -8,6 +8,8 @@ class ItemModel {
   String? deskripsi;
   String? kategoriId;
   bool? isDiskon;
+  bool? useQty;
+  bool? dijual;
   int? diskon;
   int? hargaDiskon;
   ItemModel({
@@ -17,9 +19,11 @@ class ItemModel {
     this.namaItem,
     this.deskripsi,
     this.kategoriId,
-    this.diskon,
-    this.hargaDiskon,
     this.isDiskon,
+    this.useQty,
+    this.diskon,
+    this.dijual,
+    this.hargaDiskon,
   });
   ItemModel.doc(DocumentSnapshot doc) {
     itemId = doc.id;
@@ -31,6 +35,8 @@ class ItemModel {
     diskon = doc['diskon'];
     hargaDiskon = doc['harga_diskon'];
     isDiskon = doc['is_diskon'];
+    useQty = doc['use_qty'];
+    dijual = doc['dijual'];
   }
 }
 

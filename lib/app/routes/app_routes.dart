@@ -9,6 +9,9 @@ abstract class Routes {
   static const TOKO = _Paths.TOKO;
   static const CABANG = _Paths.CABANG;
   static const ITEM = _Paths.ITEM;
+  static const PRODUK = _Paths.PRODUK;
+  static const TRANSAKSI = _Paths.TRANSAKSI;
+  static const DETAIL_TRANSAKSI = _Paths.DETAIL_TRANSAKSI;
 }
 
 abstract class _Paths {
@@ -17,4 +20,7 @@ abstract class _Paths {
   static const TOKO = '/toko';
   static const CABANG = '/cabang';
   static const ITEM = '/item';
+  static const PRODUK = '/produk';
+  static const TRANSAKSI = '/transaksi';
+  static const DETAIL_TRANSAKSI = '/detail-transaksi';
 }

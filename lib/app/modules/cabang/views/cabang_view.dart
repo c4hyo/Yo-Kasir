@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:yo_kasir/app/controllers/app_controller.dart';
 import 'package:yo_kasir/app/data/model_cabang.dart';
 import 'package:yo_kasir/app/modules/cabang/bindings/cabang_binding.dart';
-import 'package:yo_kasir/app/modules/cabang/views/beranda_cabang_view.dart';
 import 'package:yo_kasir/app/modules/cabang/views/tambah_cabang_view.dart';
 import 'package:yo_kasir/config/collection.dart';
 import 'package:yo_kasir/config/theme.dart';
@@ -66,12 +65,18 @@ class CabangView extends GetView<CabangController> {
                         ")"),
                     trailing: Visibility(
                       visible: cabang.pengelola!.contains(appC.profilModel.uid),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          controller.goToberandaCabang(cabang);
-                        },
-                        child: Text("Masuk"),
-                      ),
+                      child: appC.profilModel.uid ==
+                              controller.tokoM.value.pemilikId
+                          ? ElevatedButton(
+                              onPressed: () {},
+                              child: Text("Hapus"),
+                            )
+                          : ElevatedButton(
+                              onPressed: () {
+                                controller.goToberandaCabang(cabang);
+                              },
+                              child: Text("Masuk"),
+                            ),
                     ),
                   ),
                 );

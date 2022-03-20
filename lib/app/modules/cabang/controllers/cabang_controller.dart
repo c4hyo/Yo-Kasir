@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:yo_kasir/app/data/model_cabang.dart';
 import 'package:yo_kasir/app/modules/toko/controllers/toko_controller.dart';
 import 'package:yo_kasir/config/collection.dart';
@@ -13,6 +14,12 @@ class CabangController extends GetxController {
   final tokoM = TokoModel().obs;
   final cabangM = CabangModel().obs;
   final countProduk = 0.obs;
+  final countTransaksi = 0.obs;
+  final pendapatanPerhari = 0.obs;
+
+  final dijual = "semua".obs;
+
+  var search = "".obs;
 
   goToberandaCabang(CabangModel cabang) {
     cabangM.value = cabangM(cabang);
@@ -61,7 +68,8 @@ class CabangController extends GetxController {
           .collection("cabang")
           .doc(cabangId)
           .collection("produk-cabang")
-          .add({
+          .doc(element.id)
+          .set({
         "harga": element['harga'],
         "nama": element['nama'],
         "deskripsi": element['deskripsi'],
@@ -70,6 +78,9 @@ class CabangController extends GetxController {
         "qty": element["qty"],
         "harga_diskon": element["harga_diskon"],
         "kategori_id": element["kategori_id"],
+        "pencarian": element['pencarian'],
+        "use_qty": element['use_qty'],
+        "dijual": element['dijual'],
       });
     });
   }
@@ -100,6 +111,100 @@ class CabangController extends GetxController {
         .collection("produk-cabang")
         .snapshots()
         .map((event) => event.docs.length);
+  }
+
+  Stream<QuerySnapshot> produkCabang(
+    String? search, {
+    String? tokoId,
+    String? cabangId,
+    String? dijual,
+  }) {
+    if (search!.isEmpty) {
+      if (dijual == "dijual") {
+        return tokoDb
+            .doc(tokoId)
+            .collection("cabang")
+            .doc(cabangId)
+            .collection("produk-cabang")
+            .where("dijual", isEqualTo: true)
+            .snapshots();
+      } else if (dijual == "tidak dijual") {
+        return tokoDb
+            .doc(tokoId)
+            .collection("cabang")
+            .doc(cabangId)
+            .collection("produk-cabang")
+            .where("dijual", isEqualTo: false)
+            .snapshots();
+      } else {
+        return tokoDb
+            .doc(tokoId)
+            .collection("cabang")
+            .doc(cabangId)
+            .collection("produk-cabang")
+            .snapshots();
+      }
+    } else {
+      if (dijual == "dijual") {
+        return tokoDb
+            .doc(tokoId)
+            .collection("cabang")
+            .doc(cabangId)
+            .collection("produk-cabang")
+            .where("pencarian", arrayContains: search)
+            .where("dijual", isEqualTo: true)
+            .snapshots();
+      } else if (dijual == "tidak dijual") {
+        return tokoDb
+            .doc(tokoId)
+            .collection("cabang")
+            .doc(cabangId)
+            .collection("produk-cabang")
+            .where("pencarian", arrayContains: search)
+            .where("dijual", isEqualTo: false)
+            .snapshots();
+      } else {
+        return tokoDb
+            .doc(tokoId)
+            .collection("cabang")
+            .doc(cabangId)
+            .collection("produk-cabang")
+            .where("pencarian", arrayContains: search)
+            .snapshots();
+      }
+    }
+  }
+
+  Stream<int> getTransaksiCount(String? tokoId, String? cabangId) {
+    return transaksiDb
+        .where("toko_id", isEqualTo: tokoId)
+        .where("cabang_id", isEqualTo: cabangId)
+        .where(
+          "date_group",
+          isEqualTo: DateFormat.yMMMMd("id").format(DateTime.now()),
+        )
+        .snapshots()
+        .map((event) => event.docs.length);
+  }
+
+  Stream<int> getPendapatanCabang(String? tokoId, String? cabangId) {
+    return transaksiDb
+        .where("toko_id", isEqualTo: tokoId)
+        .where("cabang_id", isEqualTo: cabangId)
+        .where(
+          "date_group",
+          isEqualTo: DateFormat.yMMMMd("id").format(DateTime.now()),
+        )
+        .where("is_lunas", isEqualTo: true)
+        .snapshots()
+        .map((event) {
+      int total = 0;
+      event.docs.forEach((element) {
+        total += element.data()['total_harga'] as int;
+        // print(element);
+      });
+      return total;
+    });
   }
 
   @override

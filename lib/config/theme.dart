@@ -25,7 +25,7 @@ ThemeData tema = ThemeData(
   appBarTheme: AppBarTheme(
     elevation: 0,
     backgroundColor: lightBackground,
-    titleTextStyle: GoogleFonts.berkshireSwash(
+    titleTextStyle: GoogleFonts.roboto(
       color: darkText,
       fontWeight: FontWeight.bold,
       fontSize: 18,

@@ -216,6 +216,9 @@ class ProdukTokoView extends GetView<TokoController> {
                 harga: int.parse(hargaProduct.text),
               );
               controller.tambahProdukToko(item, controller.tokoM.value.tokoId);
+              namaProduct.clear();
+              deskripsiProduct.clear();
+              hargaProduct.clear();
               controller.isAddProduct.toggle();
             },
             child: Text(
