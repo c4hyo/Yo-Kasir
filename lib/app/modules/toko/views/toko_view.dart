@@ -26,183 +26,253 @@ class TokoView extends GetView<TokoController> {
   final appC = Get.find<AppController>();
   @override
   Widget build(BuildContext context) {
-    controller.produkCount.bindStream(
-      controller.getProdukCount(controller.tokoM.value.tokoId),
-    );
+    controller.produkCount
+        .bindStream(controller.getProdukCount(controller.tokoM.value.tokoId));
     controller.transaksiCount.bindStream(
         controller.getTransaksiCount(controller.tokoM.value.tokoId));
     controller.pendapatanPerhari
         .bindStream(controller.getPendapatan(controller.tokoM.value.tokoId));
+    controller.pendapatanPerBulan.bindStream(
+        controller.getPendapatanBulan(controller.tokoM.value.tokoId));
     return Scaffold(
-      drawer: Drawer(
-        child: _listDrawer(),
-      ),
-      appBar: AppBar(
-        title: Text(controller.tokoM.value.namaToko!.capitalize!),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: paddingList,
-        child: ListView(
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Obx(
-                    () => InkWell(
-                      onTap: () {
-                        Get.toNamed(
-                          Routes.CABANG,
-                          arguments: {"toko": controller.tokoM.value},
-                        );
-                      },
-                      child: cardCount(
-                        judul: "Total\nCabang",
-                        total: controller.tokoM.value.cabang,
-                        warnaAngka: primaryColor,
-                        warnaBackground: primaryColorAccent,
-                        icon: FontAwesome5.store,
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Obx(
-                    () => InkWell(
-                      onTap: () {
-                        Get.to(
-                          () => ProdukTokoView(),
-                          arguments: {"toko": controller.tokoM.value},
-                          binding: TokoBinding(),
-                        );
-                      },
-                      child: cardCount(
-                        judul: "Total\nProduk",
-                        total: controller.produkCount.value,
-                        warnaAngka: secondaryColor,
-                        warnaBackground: secondaryColorAccent,
-                        icon: FontAwesome5.list_alt,
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Obx(
-                    () => InkWell(
-                      onTap: () {
-                        controller.getPendapatan(controller.tokoM.value.tokoId);
-                      },
-                      child: cardCount(
-                        judul: "Transaksi\nhari ini",
-                        total: controller.transaksiCount.value,
-                        warnaAngka: primaryColor,
-                        warnaBackground: primaryColorAccent,
-                        icon: FontAwesome5.exchange_alt,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Card(
-              color: primaryColorAccent,
-              elevation: 2,
-              child: Container(
-                width: Get.size.width * 0.25,
-                padding: paddingList,
-                child: Obx(
-                  () => Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Text(
-                        Helper.rupiah
-                            .format(controller.pendapatanPerhari.value),
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: primaryColor,
+            Container(
+              height: Get.size.height * 0.55,
+              width: Get.size.width,
+              color: lightBackground,
+              child: Stack(
+                children: [
+                  Container(
+                    height: Get.size.width * 0.6,
+                    width: Get.size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.elliptical(
+                          Get.size.width / 2,
+                          Get.size.width * 0.1,
+                        ),
+                        bottomRight: Radius.elliptical(
+                          Get.size.width / 2,
+                          Get.size.width * 0.1,
                         ),
                       ),
-                      Text(
-                        "Pendapatan hari ini",
-                        style: TextStyle(
-                          color: darkText,
+                      color: primaryColor,
+                    ),
+                  ),
+                  Container(
+                    height: Get.size.width * 0.5,
+                    width: Get.size.width,
+                    color: primaryColor,
+                    padding: paddingList,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              icon: Icon(
+                                Icons.arrow_back,
+                              ),
+                            ),
+                            SizedBox(
+                              height: Get.size.height * 0.025,
+                            ),
+                            Obx(() => Text(
+                                  Helper.rupiah.format(
+                                      controller.pendapatanPerhari.value),
+                                  style: TextStyle(
+                                    fontSize: Get.size.width * 0.05,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )),
+                            Text(
+                              "Pendapatan Hari ini",
+                              style: TextStyle(
+                                fontSize: Get.size.width * 0.03,
+                                fontWeight: FontWeight.w200,
+                                color: darkText,
+                              ),
+                            ),
+                            SizedBox(
+                              height: Get.size.height * 0.005,
+                            ),
+                            Obx(() => Text(
+                                  Helper.rupiah.format(
+                                      controller.pendapatanPerBulan.value),
+                                  style: TextStyle(
+                                    fontSize: Get.size.width * 0.05,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )),
+                            Text(
+                              "Pendapatan Bulan ini",
+                              style: TextStyle(
+                                fontSize: Get.size.width * 0.03,
+                                fontWeight: FontWeight.w200,
+                                color: darkText,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              height: Get.size.height * 0.025,
+                            ),
+                            Text(
+                              controller.tokoM.value.namaToko!.capitalize!,
+                              style: TextStyle(
+                                fontSize: Get.size.width * 0.045,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              controller.tokoM.value.telepon!,
+                              style: TextStyle(
+                                fontSize: Get.size.width * 0.03,
+                                fontWeight: FontWeight.w200,
+                                color: darkText,
+                              ),
+                            ),
+                            SizedBox(
+                              height: Get.size.height * 0.015,
+                            ),
+                            Text(controller.tokoM.value.kodeToko!),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      color: lightBackground,
+                      elevation: 2,
+                      child: Container(
+                        height: Get.size.width * 0.6,
+                        width: Get.size.width * 0.8,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                _iconHome(Icons.store_rounded, "Cabang", () {
+                                  Get.toNamed(
+                                    Routes.CABANG,
+                                    arguments: {"toko": controller.tokoM.value},
+                                  );
+                                }),
+                                _iconHome(FontAwesome.exchange, "Transaksi",
+                                    () {
+                                  Get.to(
+                                    () => TransaksiTokoView(),
+                                    arguments: {
+                                      "toko": controller.tokoM.value,
+                                      "cabang": CabangModel()
+                                    },
+                                    binding: TransaksiBinding(),
+                                  );
+                                }),
+                                _iconHome(FontAwesome.tags, "Produk", () {
+                                  Get.to(
+                                    () => ProdukTokoView(),
+                                    arguments: {"toko": controller.tokoM.value},
+                                    binding: TokoBinding(),
+                                  );
+                                }),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                _iconHome(Icons.people_alt, "Pengelola", () {}),
+                                _iconHome(Icons.bar_chart, "Statistik", () {}),
+                                _iconHome(Icons.settings, "Pengaturan", () {}),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+              child: Text(
+                "Daftar Cabang",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            SizedBox(
-              height: 15,
-            ),
-            Text(
-              "Daftar Cabang",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            StreamBuilder<QuerySnapshot>(
-              stream: tokoDb
-                  .doc(controller.tokoM.value.tokoId)
-                  .collection("cabang")
-                  .snapshots(),
-              builder: (_, snapshot) {
-                if (!snapshot.hasData) {
-                  return ListTile();
-                }
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (_, i) {
-                    DocumentSnapshot doc = snapshot.data!.docs[i];
-                    CabangModel cabang = CabangModel.doc(doc);
-                    return Card(
-                      elevation: 0.5,
-                      color: primaryColorAccent,
-                      child: ListTile(
-                        title: Text(cabang.namaCabang!.capitalize!),
-                        subtitle: Text(cabang.alamatCabang!.capitalizeFirst! +
-                            " ~ (" +
-                            cabang.telepon! +
-                            ")"),
-                        trailing: Visibility(
-                          visible:
-                              cabang.pengelola!.contains(appC.profilModel.uid),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              // controller.goToberandaCabang(cabang);
-                              Get.to(
-                                () => BerandaCabangView(),
-                                arguments: {
-                                  "toko": controller.tokoM.value,
-                                  "cabang": cabang,
-                                },
-                                binding: CabangBinding(),
-                              );
-                            },
-                            child: Text("Masuk"),
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: tokoDb
+                    .doc(controller.tokoM.value.tokoId)
+                    .collection("cabang")
+                    .snapshots(),
+                builder: (_, snapshot) {
+                  if (!snapshot.hasData) {
+                    return ListTile();
+                  }
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (_, i) {
+                      DocumentSnapshot doc = snapshot.data!.docs[i];
+                      CabangModel cabang = CabangModel.doc(doc);
+                      return Card(
+                        elevation: 0.5,
+                        color: primaryColorAccent,
+                        child: ListTile(
+                          dense: true,
+                          title: Text(cabang.namaCabang!.capitalize!),
+                          subtitle: Text(cabang.alamatCabang!.capitalizeFirst! +
+                              " ~ (" +
+                              cabang.telepon! +
+                              ")"),
+                          trailing: Visibility(
+                            visible: cabang.pengelola!
+                                .contains(appC.profilModel.uid),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // controller.goToberandaCabang(cabang);
+                                Get.to(
+                                  () => BerandaCabangView(),
+                                  arguments: {
+                                    "toko": controller.tokoM.value,
+                                    "cabang": cabang,
+                                  },
+                                  binding: CabangBinding(),
+                                );
+                              },
+                              child: Text("Masuk"),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              },
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -210,75 +280,28 @@ class TokoView extends GetView<TokoController> {
     );
   }
 
-  Widget _listDrawer() {
-    return ListView(
-      children: [
-        UserAccountsDrawerHeader(
-          decoration: BoxDecoration(color: primaryColor),
-          accountName: Text(controller.tokoM.value.namaToko!.capitalize!),
-          accountEmail: Text(controller.tokoM.value.kodeToko.toString()),
+  Widget _iconHome(IconData? icon, String? judul, Function()? onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: Get.size.width * 0.2,
+        width: Get.size.width * 0.2,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircleAvatar(
+              backgroundColor: primaryColorAccent,
+              radius: Get.size.width * 0.065,
+              child: Icon(
+                icon,
+                color: Colors.black87,
+                size: Get.size.width * 0.065,
+              ),
+            ),
+            Text(judul!.capitalize!),
+          ],
         ),
-        ListTile(
-          onTap: () {
-            Get.back();
-            Get.to(
-              () => ProdukTokoView(),
-              arguments: {"toko": controller.tokoM.value},
-              binding: TokoBinding(),
-            );
-          },
-          title: Text("Produk yang dijual"),
-          leading: Icon(
-            FontAwesome.list_alt,
-          ),
-        ),
-        Visibility(
-          child: ListTile(
-            onTap: () {
-              Get.back();
-              Get.toNamed(
-                Routes.CABANG,
-                arguments: {"toko": controller.tokoM.value},
-              );
-            },
-            title: Text("Cabang"),
-            leading: Icon(FontAwesome5.store),
-          ),
-        ),
-        ListTile(
-          title: Text("Transaksi"),
-          onTap: () {
-            Get.back();
-            Get.to(
-              () => TransaksiTokoView(),
-              arguments: {
-                "toko": controller.tokoM.value,
-                "cabang": CabangModel()
-              },
-              binding: TransaksiBinding(),
-            );
-          },
-          leading: Icon(
-            FontAwesome.exchange,
-          ),
-        ),
-        ListTile(
-          title: Text("Pengaturan toko"),
-          leading: Icon(
-            FontAwesome.cog,
-          ),
-        ),
-        ListTile(
-          onTap: () {
-            Get.back();
-            Get.back();
-          },
-          title: Text("Kembali"),
-          leading: Icon(
-            Icons.arrow_back,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
