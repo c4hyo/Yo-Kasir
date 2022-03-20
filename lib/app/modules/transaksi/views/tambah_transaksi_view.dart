@@ -129,12 +129,21 @@ class TambahTransaksiView extends GetView<TransaksiController> {
                       controller.totalHarga.value =
                           controller.totalHarga.value + produk.hargaProduk!;
                     } else {
-                      if (item.useQty! == true) {
-                        controller.updateQty(indexProduk);
-                        controller.totalHarga.value =
-                            controller.totalHarga.value + produk.hargaProduk!;
+                      if (produk.qtyProduk! >=
+                          controller
+                              .listProduk[controller.listProduk.indexWhere(
+                                  (element) => element.itemId == produk.itemId)]
+                              .qty!) {
+                        Get.snackbar("Peringatan !",
+                            "Stok barang sudah habis atau perbarui data stok");
+                      } else {
+                        if (item.useQty! == true) {
+                          controller.updateQty(indexProduk);
+                          controller.totalHarga.value =
+                              controller.totalHarga.value + produk.hargaProduk!;
+                        }
+                        controller.keranjang.refresh();
                       }
-                      controller.keranjang.refresh();
                     }
 
                     Get.back();
