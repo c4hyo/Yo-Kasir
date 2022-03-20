@@ -7,6 +7,7 @@ import 'package:yo_kasir/app/controllers/app_controller.dart';
 import 'package:yo_kasir/app/data/model_cabang.dart';
 
 import 'package:yo_kasir/app/modules/toko/bindings/toko_binding.dart';
+import 'package:yo_kasir/app/modules/toko/views/pengelola_toko_view.dart';
 import 'package:yo_kasir/app/modules/toko/views/produk_toko_view.dart';
 import 'package:yo_kasir/app/modules/transaksi/bindings/transaksi_binding.dart';
 import 'package:yo_kasir/app/modules/transaksi/views/transaksi_toko_view.dart';
@@ -198,7 +199,13 @@ class TokoView extends GetView<TokoController> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                _iconHome(Icons.people_alt, "Pengelola", () {}),
+                                _iconHome(Icons.people_alt, "Pengelola", () {
+                                  Get.to(
+                                    () => PengelolaTokoView(),
+                                    arguments: {"toko": controller.tokoM.value},
+                                    binding: TokoBinding(),
+                                  );
+                                }),
                                 _iconHome(Icons.bar_chart, "Statistik", () {}),
                                 _iconHome(Icons.settings, "Pengaturan", () {}),
                               ],
