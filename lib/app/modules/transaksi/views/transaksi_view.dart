@@ -12,7 +12,6 @@ class TransaksiView extends GetView<TransaksiController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('Transaksi'),
         centerTitle: true,
@@ -269,7 +268,34 @@ class TransaksiView extends GetView<TransaksiController> {
                 style: ElevatedButton.styleFrom(
                   primary: Colors.red.shade700,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Get.defaultDialog(
+                    title: "Peringatan!",
+                    middleText: "Apakah anda akan menghapus produk ini",
+                    cancel: ElevatedButton(
+                      onPressed: () {
+                        controller.keranjang.removeWhere(
+                            (element) => element.itemId == produk.itemId);
+                        controller.totalHarga.value =
+                            controller.totalHarga.value - produk.hargaProduk!;
+                        Get.back();
+                      },
+                      child: Text("Ya"),
+                    ),
+                    confirm: ElevatedButton(
+                      style: borderButton,
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: Text(
+                        "Tidak",
+                        style: TextStyle(
+                          color: primaryColor,
+                        ),
+                      ),
+                    ),
+                  );
+                },
                 child: Icon(
                   Icons.delete_outline,
                 ),
@@ -365,11 +391,11 @@ class TransaksiView extends GetView<TransaksiController> {
                     primary: Colors.green.shade300,
                   ),
                   onPressed: () {
-                    if (produk.qtyProduk! ==
+                    if (produk.qtyProduk! >=
                         controller
                             .listProduk[controller.listProduk.indexWhere(
                                 (element) => element.itemId == produk.itemId)]
-                            .qty) {
+                            .qty!) {
                       Get.snackbar("Peringatan !",
                           "Stok barang sudah habis atau perbarui data stok");
                     } else {
