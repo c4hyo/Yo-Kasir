@@ -80,6 +80,16 @@ class BerandaCabangView extends GetView<CabangController> {
                   flex: 5,
                   child: Obx(
                     () => InkWell(
+                      onTap: () {
+                        Get.to(
+                          () => TransaksiCabangView(),
+                          arguments: {
+                            "toko": controller.tokoM.value,
+                            "cabangM": controller.cabangM.value
+                          },
+                          binding: TransaksiBinding(),
+                        );
+                      },
                       child: cardCount(
                         judul: "Transaksi\nhari ini",
                         total: controller.countTransaksi.value,
