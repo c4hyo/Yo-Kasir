@@ -36,6 +36,38 @@ class ProdukController extends GetxController {
     });
   }
 
+  updateProdukToko(
+    ItemModel? produk,
+    String? tokoId,
+  ) async {
+    await tokoDb
+        .doc(tokoId)
+        .collection("produk-toko")
+        .doc(produk!.itemId)
+        .update({
+      "harga": produk.harga,
+      "nama": produk.namaItem,
+      "deskripsi": produk.deskripsi,
+    });
+    await tokoDb.doc(tokoId).collection("cabang").get().then((value) {
+      if (value.docs.isNotEmpty) {
+        value.docs.forEach((element) async {
+          await tokoDb
+              .doc(tokoId)
+              .collection("cabang")
+              .doc(element.id)
+              .collection("produk-cabang")
+              .doc(produk.itemId)
+              .update({
+            "harga": produk.harga,
+            "nama": produk.namaItem,
+            "deskripsi": produk.deskripsi,
+          });
+        });
+      }
+    });
+  }
+
   Stream<QuerySnapshot> produkCabang(
     String? search, {
     String? tokoId,

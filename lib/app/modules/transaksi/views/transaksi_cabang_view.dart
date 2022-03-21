@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:yo_kasir/app/modules/transaksi/controllers/transaksi_controller.dart';
 import 'package:yo_kasir/app/routes/app_pages.dart';
 
-import '../../../../config/collection.dart';
 import '../../../../config/helper.dart';
 import '../../../../config/theme.dart';
 import '../../../data/model_transaksi.dart';
@@ -100,7 +99,12 @@ class TransaksiCabangView extends GetView<TransaksiController> {
                       if (i == 0) {
                         return Column(
                           children: [
-                            Chip(label: Text("Hari ini")),
+                            Chip(
+                                label: Text(tm.dateGroup ==
+                                        DateFormat.yMMMMd("id")
+                                            .format(DateTime.now())
+                                    ? "Hari ini"
+                                    : tm.dateGroup!)),
                             _infoTransaksi(tm),
                           ],
                         );

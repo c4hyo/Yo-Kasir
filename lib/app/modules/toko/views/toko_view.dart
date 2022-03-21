@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttericon/font_awesome5_icons.dart';
+
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 import 'package:yo_kasir/app/controllers/app_controller.dart';
@@ -17,7 +17,6 @@ import 'package:yo_kasir/config/helper.dart';
 import 'package:yo_kasir/config/theme.dart';
 
 import '../../../../config/collection.dart';
-import '../../../../widget/card_count.dart';
 
 import '../../cabang/bindings/cabang_binding.dart';
 import '../../cabang/views/beranda_cabang_view.dart';
@@ -36,12 +35,16 @@ class TokoView extends GetView<TokoController> {
     controller.pendapatanPerBulan.bindStream(
         controller.getPendapatanBulan(controller.tokoM.value.tokoId));
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: primaryColor,
+        elevation: 0,
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: Get.size.height * 0.55,
+              height: Get.size.height * 0.5,
               width: Get.size.width,
               color: lightBackground,
               child: Stack(
@@ -74,17 +77,6 @@ class TokoView extends GetView<TokoController> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            IconButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              icon: Icon(
-                                Icons.arrow_back,
-                              ),
-                            ),
-                            SizedBox(
-                              height: Get.size.height * 0.025,
-                            ),
                             Obx(() => Text(
                                   Helper.rupiah.format(
                                       controller.pendapatanPerhari.value),
@@ -125,9 +117,6 @@ class TokoView extends GetView<TokoController> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            SizedBox(
-                              height: Get.size.height * 0.025,
-                            ),
                             Text(
                               controller.tokoM.value.namaToko!.capitalize!,
                               style: TextStyle(

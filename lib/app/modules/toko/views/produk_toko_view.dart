@@ -2,11 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:yo_kasir/app/data/model_cabang.dart';
 import 'package:yo_kasir/app/data/model_item.dart';
+import 'package:yo_kasir/app/modules/produk/views/update_produk_toko_view.dart';
 import 'package:yo_kasir/app/modules/toko/controllers/toko_controller.dart';
 import 'package:yo_kasir/config/collection.dart';
 import 'package:yo_kasir/config/helper.dart';
 import 'package:yo_kasir/config/theme.dart';
+
+import '../../produk/bindings/produk_binding.dart';
 
 class ProdukTokoView extends GetView<TokoController> {
   final namaProduct = TextEditingController();
@@ -59,8 +63,24 @@ class ProdukTokoView extends GetView<TokoController> {
                 elevation: 0.5,
                 child: ListTile(
                   title: Text(item.namaItem!.capitalize!),
-                  subtitle: Text(item.deskripsi!),
-                  trailing: Text(Helper.rupiah.format(item.harga)),
+                  subtitle: Text(
+                    Helper.rupiah.format(item.harga) + "\n" + item.deskripsi!,
+                  ),
+                  isThreeLine: true,
+                  trailing: ElevatedButton(
+                    onPressed: () {
+                      Get.to(
+                        () => UpdateProdukTokoView(),
+                        arguments: {
+                          "produk": item,
+                          "toko": controller.tokoM.value,
+                          "cabang": CabangModel(),
+                        },
+                        binding: ProdukBinding(),
+                      );
+                    },
+                    child: Text("Update"),
+                  ),
                 ),
               );
             },
@@ -162,49 +182,6 @@ class ProdukTokoView extends GetView<TokoController> {
           SizedBox(
             height: Get.size.height * 0.025,
           ),
-          // Card(
-          //   color: primaryColorAccent,
-          //   elevation: 0,
-          //   child: CheckboxListTile(
-          //     value: controller.isDiskon.value,
-          //     onChanged: (v) {
-          //       controller.isDiskon.value = v!;
-          //     },
-          //     controlAffinity: ListTileControlAffinity.leading,
-          //     title: Text("Diskon"),
-          //   ),
-          // ),
-          // SizedBox(
-          //   height: Get.size.height * 0.025,
-          // ),
-          // Visibility(
-          //   visible: controller.isDiskon.value,
-          //   child: TextFormField(
-          //     controller: namaProduct,
-          //     cursorColor: darkText,
-          //     style: TextStyle(
-          //       color: darkText,
-          //     ),
-          //     decoration: InputDecoration(
-          //       hintText: "Diskon",
-          //       contentPadding: EdgeInsets.all(20),
-          //       filled: true,
-          //       fillColor: primaryColorAccent,
-          //       border: OutlineInputBorder(
-          //         borderRadius: BorderRadius.circular(10),
-          //         borderSide: BorderSide(
-          //           color: primaryColorAccent,
-          //         ),
-          //       ),
-          //       enabledBorder: OutlineInputBorder(
-          //         borderRadius: BorderRadius.circular(10),
-          //         borderSide: BorderSide(
-          //           color: primaryColorAccent,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               fixedSize: Size(Get.size.width, 50),
